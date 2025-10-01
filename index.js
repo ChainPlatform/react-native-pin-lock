@@ -29,6 +29,7 @@ export class PinLockProvider extends Component {
             shakeAnim: new Animated.Value(0),
             appState: AppState.currentState,
             lastBackgroundTime: null,
+            resetTriggered: null
         };
     }
 
@@ -79,11 +80,17 @@ export class PinLockProvider extends Component {
     };
 
     hidePinLock = () => {
-        this.setState({ visible: false, enteredPin: "", tempNewPin: null });
+        this.setState({ visible: false, enteredPin: "", tempNewPin: null, resetTriggered: null });
     };
 
-    setPinLock = () => {
-        this.setState({ mode: "setup", enteredPin: "", tempNewPin: null, visible: true });
+    setPinLock = (resetTriggered = null) => {
+        this.setState({
+            mode: "setup",
+            enteredPin: "",
+            tempNewPin: null,
+            visible: true,
+            resetTriggered: resetTriggered
+        });
     };
 
     handleKeyPress = (digit) => {
@@ -168,30 +175,39 @@ export class PinLockProvider extends Component {
                                 <Text style={{ fontSize: setSize(20), fontWeight: sdkStyles.fw600 }}>{d}</Text>
                             </Pressable>
                         ))}
-                        {rowIndex === 3 && (this.state.mode === "setup" || this.state.mode === "confirm") && this.props.correctPin && (
-                            <View style={{
-                                width: setSize(60),
-                                height: setSize(60),
-                                borderRadius: setSize(30),
-                                backgroundColor: sdkColors.transparent,
-                                justifyContent: sdkStyles.center,
-                                alignItems: sdkStyles.center,
-                                margin: setSize(6)
-                            }}></View>
-                        )}
-                        {rowIndex === 3 && (this.state.mode === "setup" || this.state.mode === "confirm") && this.props.correctPin && (
-                            <Pressable style={{
-                                width: setSize(60),
-                                height: setSize(60),
-                                borderRadius: setSize(30),
-                                backgroundColor: sdkColors.border,
-                                justifyContent: sdkStyles.center,
-                                alignItems: sdkStyles.center,
-                                margin: setSize(6)
-                            }} onPress={() => this.hidePinLock()}>
-                                <Text style={{ fontSize: setSize(20), fontWeight: sdkStyles.fw600 }}>X</Text>
-                            </Pressable>
-                        )}
+                        {rowIndex === 3 &&
+                            (this.state.mode === "setup" || this.state.mode === "confirm")
+                            && this.state.resetTriggered
+                            && this.props.correctPin && (
+                                <View style={{
+                                    width: setSize(60),
+                                    height: setSize(60),
+                                    borderRadius: setSize(30),
+                                    backgroundColor: sdkColors.transparent,
+                                    justifyContent: sdkStyles.center,
+                                    alignItems: sdkStyles.center,
+                                    margin: setSize(6)
+                                }}></View>
+                            )}
+                        {rowIndex === 3 &&
+                            (
+                                this.state.mode === "setup" ||
+                                this.state.mode === "confirm"
+                            ) &&
+                            this.state.resetTriggered &&
+                            this.props.correctPin && (
+                                <Pressable style={{
+                                    width: setSize(60),
+                                    height: setSize(60),
+                                    borderRadius: setSize(30),
+                                    backgroundColor: sdkColors.border,
+                                    justifyContent: sdkStyles.center,
+                                    alignItems: sdkStyles.center,
+                                    margin: setSize(6)
+                                }} onPress={() => this.hidePinLock()}>
+                                    <Text style={{ fontSize: setSize(20), fontWeight: sdkStyles.fw600 }}>X</Text>
+                                </Pressable>
+                            )}
                     </View>
                 ))}
             </View>
@@ -235,7 +251,7 @@ export class PinLockProvider extends Component {
                                 paddingHorizontal: setSize(12),
                                 borderRadius: setSize(6),
                                 backgroundColor: sdkColors.border
-                            }} onPress={() => this.setPinLock()}>
+                            }} onPress={() => this.setPinLock(this.state.resetTriggered != null ? this.state.resetTriggered : null)}>
                                 <Text style={{
                                     fontSize: setSize(14),
                                     fontWeight: sdkStyles.fw600
@@ -264,4 +280,4 @@ export class PinLockProvider extends Component {
 
 export function showPinLock(options) { if (showPinLockGlobal) showPinLockGlobal(options); }
 export function hidePinLock() { if (hidePinLockGlobal) hidePinLockGlobal(); }
-export function setPinLock() { if (setPinLockGlobal) setPinLockGlobal(); }
+export function setPinLock(resetTriggered) { if (setPinLockGlobal) setPinLockGlobal(resetTriggered); }

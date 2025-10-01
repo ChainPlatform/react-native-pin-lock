@@ -1,6 +1,6 @@
 {
     "name": "@chainplatform/pin",
-    "version": "0.1.6",
+    "version": "0.1.9",
     "main": "index.js",
     "react-native": "index.js",
     "description": "A lightweight second-layer security module for React Native / React Native Web. Provides a PIN lock overlay that can be triggered globally, with support for setting/resetting PIN.",
