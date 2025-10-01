@@ -241,7 +241,7 @@ export class PinLockProvider extends Component {
                                     fontWeight: sdkStyles.fw600
                                 }}>{resetText}</Text>
                             </Pressable>)}
-                            {(mode === "setup" || mode === "confirm") && (
+                            {(mode === "setup" || mode === "confirm") && this.props.correctPin && (
                                 <Pressable style={{
                                     marginTop: setSize(15),
                                     paddingVertical: setSize(8),
