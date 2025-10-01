@@ -164,6 +164,19 @@ export class PinLockProvider extends Component {
                                 <Text style={{ fontSize: setSize(20), fontWeight: sdkStyles.fw600 }}>{d}</Text>
                             </Pressable>
                         ))}
+                        {rowIndex === 3 && (mode === "setup" || mode === "confirm") && this.props.correctPin && (
+                            <Pressable style={{
+                                width: setSize(60),
+                                height: setSize(60),
+                                borderRadius: setSize(30),
+                                backgroundColor: sdkColors.red_product,
+                                justifyContent: sdkStyles.center,
+                                alignItems: sdkStyles.center,
+                                margin: setSize(6)
+                            }} onPress={() => this.hidePinLock()}>
+                                <Text style={{ fontSize: setSize(20), fontWeight: sdkStyles.fw600 }}>❌</Text>
+                            </Pressable>
+                        )}
                     </View>
                 ))}
             </View>
