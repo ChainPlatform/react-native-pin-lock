@@ -169,11 +169,22 @@ export class PinLockProvider extends Component {
                             </Pressable>
                         ))}
                         {rowIndex === 3 && (this.state.mode === "setup" || this.state.mode === "confirm") && this.props.correctPin && (
+                            <View style={{
+                                width: setSize(60),
+                                height: setSize(60),
+                                borderRadius: setSize(30),
+                                backgroundColor: sdkColors.transparent,
+                                justifyContent: sdkStyles.center,
+                                alignItems: sdkStyles.center,
+                                margin: setSize(6)
+                            }}></View>
+                        )}
+                        {rowIndex === 3 && (this.state.mode === "setup" || this.state.mode === "confirm") && this.props.correctPin && (
                             <Pressable style={{
                                 width: setSize(60),
                                 height: setSize(60),
                                 borderRadius: setSize(30),
-                                backgroundColor: sdkColors.red_product,
+                                backgroundColor: sdkColors.transparent,
                                 justifyContent: sdkStyles.center,
                                 alignItems: sdkStyles.center,
                                 margin: setSize(6)
