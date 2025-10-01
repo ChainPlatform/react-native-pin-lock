@@ -157,14 +157,18 @@ export class PinLockProvider extends Component {
                     <View key={rowIndex} style={{ flexDirection: sdkStyles.flexRow, justifyContent: sdkStyles.center }}>
                         {row.map((d) => (
                             <Pressable key={d} style={{
-                                width: setSize(60), height: setSize(60), borderRadius: setSize(30),
-                                backgroundColor: sdkColors.border, justifyContent: sdkStyles.center,
-                                alignItems: sdkStyles.center, margin: setSize(6)
+                                width: setSize(60),
+                                height: setSize(60),
+                                borderRadius: setSize(30),
+                                backgroundColor: sdkColors.border,
+                                justifyContent: sdkStyles.center,
+                                alignItems: sdkStyles.center,
+                                margin: setSize(6)
                             }} onPress={() => this.handleKeyPress(d)}>
                                 <Text style={{ fontSize: setSize(20), fontWeight: sdkStyles.fw600 }}>{d}</Text>
                             </Pressable>
                         ))}
-                        {rowIndex === 3 && (mode === "setup" || mode === "confirm") && this.props.correctPin && (
+                        {rowIndex === 3 && (this.state.mode === "setup" || this.state.mode === "confirm") && this.props.correctPin && (
                             <Pressable style={{
                                 width: setSize(60),
                                 height: setSize(60),
