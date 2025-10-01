@@ -184,12 +184,12 @@ export class PinLockProvider extends Component {
                                 width: setSize(60),
                                 height: setSize(60),
                                 borderRadius: setSize(30),
-                                backgroundColor: sdkColors.transparent,
+                                backgroundColor: sdkColors.border,
                                 justifyContent: sdkStyles.center,
                                 alignItems: sdkStyles.center,
                                 margin: setSize(6)
                             }} onPress={() => this.hidePinLock()}>
-                                <Text style={{ fontSize: setSize(20), fontWeight: sdkStyles.fw600 }}>❌</Text>
+                                <Text style={{ fontSize: setSize(20), fontWeight: sdkStyles.fw600, color: sdkColors.white }}>X</Text>
                             </Pressable>
                         )}
                     </View>
