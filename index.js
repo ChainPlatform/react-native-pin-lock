@@ -69,11 +69,12 @@ export class PinLockProvider extends Component {
 
     showPinLock = ({ onUnlock = null } = {}) => {
         let { correctPin } = this.props;
-        correctPin = (correctPin).toString();
+        correctPin = correctPin != null ? (correctPin).toString() : correctPin;
         this.setState({
             visible: true,
             enteredPin: "",
             tempNewPin: null,
+            resetTriggered: this.state.resetTriggered != null ? this.state.resetTriggered : null,
             mode: correctPin ? "unlock" : "setup",
             onUnlock,
         });
@@ -96,7 +97,7 @@ export class PinLockProvider extends Component {
     handleKeyPress = (digit) => {
         const { enteredPin, tempNewPin, mode, onUnlock } = this.state;
         let { correctPin, onSetPin } = this.props;
-        correctPin = (correctPin).toString();
+        correctPin = correctPin != null ? (correctPin).toString() : correctPin;
         const pinLength = correctPin ? correctPin.length : 6;
 
         if (enteredPin.length < pinLength) {
@@ -139,7 +140,7 @@ export class PinLockProvider extends Component {
 
     renderDots = () => {
         const { enteredPin } = this.state;
-        const pinLength = this.props.correctPin ? ((this.props.correctPin).toString()).length : 6;
+        const pinLength = this.props.correctPin != null ? ((this.props.correctPin).toString()).length : 6;
 
         return (
             <View style={{ flexDirection: sdkStyles.flexRow, marginBottom: setSize(20) }}>
@@ -223,58 +224,56 @@ export class PinLockProvider extends Component {
         const cancelText = this.props.cancelText ? this.props.cancelText : "Cancel";
         if (mode === "setup") headerText = setupText;
         if (mode === "confirm") headerText = confirmText;
-        return (
-            <PinLockContext.Provider>
-                {this.props.children}
-                <Modal visible={visible} transparent>
-                    <Pressable style={{
-                        flex: 1,
-                        backgroundColor: sdkColors.white,
-                        justifyContent: sdkStyles.center,
-                        alignItems: sdkStyles.center
-                    }} onPress={this.triggerShake}>
-                        <Animated.View style={{
-                            backgroundColor: sdkColors.white, padding: setSize(20),
-                            borderRadius: setSize(12), width: setSize(250),
-                            alignItems: sdkStyles.center, transform: [{ translateX: shakeAnim }]
-                        }}>
+        return (<PinLockContext.Provider>
+            {this.props.children}
+            <Modal visible={visible} transparent>
+                <Pressable style={{
+                    flex: 1,
+                    backgroundColor: sdkColors.white,
+                    justifyContent: sdkStyles.center,
+                    alignItems: sdkStyles.center
+                }} onPress={this.triggerShake}>
+                    <Animated.View style={{
+                        backgroundColor: sdkColors.white, padding: setSize(20),
+                        borderRadius: setSize(12), width: setSize(250),
+                        alignItems: sdkStyles.center, transform: [{ translateX: shakeAnim }]
+                    }}>
+                        <Text style={{
+                            fontSize: setSize(18),
+                            fontWeight: sdkStyles.fwBold,
+                            marginBottom: setSize(20)
+                        }}>{headerText}</Text>
+                        {this.renderDots()}
+                        {this.renderKeypad()}
+                        {this.state.resetTriggered != null && mode === "unlock" && (<Pressable style={{
+                            marginTop: setSize(15),
+                            paddingVertical: setSize(8),
+                            paddingHorizontal: setSize(12),
+                            borderRadius: setSize(6),
+                            backgroundColor: sdkColors.border
+                        }} onPress={() => this.setPinLock(this.state.resetTriggered != null ? this.state.resetTriggered : null)}>
                             <Text style={{
-                                fontSize: setSize(18),
-                                fontWeight: sdkStyles.fwBold,
-                                marginBottom: setSize(20)
-                            }}>{headerText}</Text>
-                            {this.renderDots()}
-                            {this.renderKeypad()}
-                            {mode === "unlock" && (<Pressable style={{
+                                fontSize: setSize(14),
+                                fontWeight: sdkStyles.fw600
+                            }}>{resetText}</Text>
+                        </Pressable>)}
+                        {(mode === "setup" || mode === "confirm") && this.props.correctPin && (
+                            <Pressable style={{
                                 marginTop: setSize(15),
                                 paddingVertical: setSize(8),
                                 paddingHorizontal: setSize(12),
                                 borderRadius: setSize(6),
                                 backgroundColor: sdkColors.border
-                            }} onPress={() => this.setPinLock(this.state.resetTriggered != null ? this.state.resetTriggered : null)}>
+                            }} onPress={() => this.showPinLock()}>
                                 <Text style={{
                                     fontSize: setSize(14),
                                     fontWeight: sdkStyles.fw600
-                                }}>{resetText}</Text>
+                                }}>{cancelText}</Text>
                             </Pressable>)}
-                            {(mode === "setup" || mode === "confirm") && this.props.correctPin && (
-                                <Pressable style={{
-                                    marginTop: setSize(15),
-                                    paddingVertical: setSize(8),
-                                    paddingHorizontal: setSize(12),
-                                    borderRadius: setSize(6),
-                                    backgroundColor: sdkColors.border
-                                }} onPress={() => this.showPinLock()}>
-                                    <Text style={{
-                                        fontSize: setSize(14),
-                                        fontWeight: sdkStyles.fw600
-                                    }}>{cancelText}</Text>
-                                </Pressable>)}
-                        </Animated.View>
-                    </Pressable>
-                </Modal>
-            </PinLockContext.Provider>
-        );
+                    </Animated.View>
+                </Pressable>
+            </Modal>
+        </PinLockContext.Provider>);
     }
 }
 
